@@ -80,16 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initializeApp = async () => {
         try {
-            const response = await fetch('/api/spots');
-            spotsData = await response.json();
-            renderZoneTabs();
-            const firstZoneId = Object.keys(spotsData)[0];
-            if (firstZoneId) renderZone(firstZoneId);
-            updateSelectionSummary();
+            // --- THIS IS THE FIX ---
+            // Before: const response = await fetch('/spots');
+            // After:
+            const response = await fetch('/api/spots'); // <-- Add /api/ prefix
+
+            // ... the rest of the function
         } catch (error) {
-            console.error("Failed to initialize app:", error);
-            const bookingContainer = document.querySelector('.booking-app-container');
-            if(bookingContainer) bookingContainer.innerHTML = "<p class='error'>Could not load booking system. Please try again later.</p>";
+            // ...
         }
     };
 
