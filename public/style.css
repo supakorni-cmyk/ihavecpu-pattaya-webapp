@@ -1,0 +1,657 @@
+/* File: public/style.css */
+/* --- NEW: Universal Box Sizing Reset --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+:root {
+	--primary-color: #de493c;     /* iHAVECPU Orange */
+	--dark-color: #262626;
+	--light-color: #f5f5f5;
+	--grey-color: #dcdcdc;
+	--selection-color: #007bff;     /* Blue for selected items */
+}
+
+/* --- General & Showcase Styles --- */
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #dcdcdc;
+	color: #333;
+	margin: 0;
+	line-height: 1.6;
+}
+
+header {
+    /* Change position to absolute */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    
+    /* Make the background transparent */
+    background-color: transparent; 
+    border-bottom: none; /* Remove the orange border */
+
+    /* Keep these for layout */
+    color: var(--light-color);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-sizing: border-box; /* Add this to ensure padding is included in the width */
+}
+
+/* --- Hero Section --- */
+
+header.header-hidden {
+    transform: translateY(-100%);
+}
+
+.logo {
+	/* The parent div doesn't need text styling anymore */
+	display: flex; /* Helps with vertical alignment if needed */
+	align-items: center;
+}
+
+/* Style the image inside the logo container */
+.logo img {
+	height: 40px; /* Adjust the height of your logo as needed */
+	width: auto;  /* Maintain aspect ratio */
+	display: block; /* Removes extra space below the image */
+}
+
+header nav a {
+	color: var(--light-color);
+	text-decoration: none;
+	margin-left: 20px;
+	transition: color 0.3s;
+}
+
+header nav a:hover {
+	color: var(--primary-color);
+}
+
+#hero {
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(images/hero.jpg) fixed top center/cover;
+	color: var(--light-color);
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.hero-content h1 {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.cta-button {
+	display: inline-block;
+	background-color: var(--primary-color);
+	color: var(--light-color);
+	padding: 12px 24px;
+	text-decoration: none;
+	border-radius: 5px;
+	font-weight: bold;
+	margin-top: 1rem;
+	transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+	background-color: #e03e00;
+}
+
+.content-section {
+	max-width: 1200px;
+	margin: 3rem auto;
+	padding: 3rem 2rem;
+	text-align: center;
+    border-radius: 8px;
+    background-color: var(--light-color);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+}
+
+.content-section h2 {
+	font-size: 2.5rem;
+	margin-bottom: 2rem;
+	position: relative;
+	display: inline-block;
+}
+
+.content-section h2::after {
+	content: '';
+	display: block;
+	width: 60%;
+	height: 4px;
+	background-color: var(--primary-color);
+	margin: 0.5rem auto 0;
+}
+
+/* --- Gallery Section (UPDATED) --- */
+.gallery-main-image {
+    width: 100%;
+    max-width: 800px; /* Limits the max size of the main image */
+    margin: 0 auto 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    cursor: pointer;
+}
+
+#main-gallery-image {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.gallery-main-image:hover #main-gallery-image {
+    transform: scale(1.03);
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    max-width: 800px;
+    margin: auto;
+}
+.gallery-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+}
+.gallery-thumb:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+.gallery-thumb.active-thumb {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+}
+
+/* --- Modal Styles --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top of everything */
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+}
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 1200px;
+}
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.close-modal:hover,
+.close-modal:focus {
+    color: #bbb;
+    text-decoration: none;
+}
+
+
+.layout-main-image {
+    width: 100%;
+    max-width: 800px; /* Limits the max size of the main image */
+    margin: 0 auto 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+#layout-image {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.location-container {
+	display: flex;
+	gap: 2rem;
+	flex-wrap: wrap;
+	text-align: left;
+}
+
+.map-embed {
+	flex: 1;
+	min-width: 300px;
+}
+
+.map-embed iframe {
+	width: 100%;
+	height: 100%;
+	min-height: 350px;
+	border-radius: 8px;
+}
+
+.address-info {
+	flex: 1;
+}
+
+
+/* --- Location Potential Section --- */
+#potential {
+	background-color: var(--light-color);     /* Or var(--grey-color) for contrast */
+}
+
+.potential-container {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	flex-wrap: wrap;
+	text-align: left;
+}
+
+.potential-item {
+	background-color: var(--grey-color);     /* Or var(--light-color) if section is grey */
+	padding: 2rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+	flex-basis: 300px;
+	border-left: 4px solid var(--primary-color);
+}
+
+.potential-item h3 {
+	margin-top: 0;
+    text-align: center;
+	color: var(--dark-color);
+}
+
+/* --- Button-Based Booking System --- */
+#booking { background-color: var(--light-color); }
+#booking .subtitle { max-width: 600px; margin: -1rem auto 2rem; color: #666; }
+
+.booking-app-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    text-align: left;
+}
+.spot-selection-area {
+    flex: 2;
+    min-width: 600px;
+}
+.summary-panel {
+    flex: 1;
+    min-width: 320px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    align-self: flex-start;
+    position: sticky;
+    top: 20px;
+}
+.summary-panel h3 { text-align: center; margin-top: 0; }
+
+/* Zone Tabs Styling */
+.zone-tabs {
+    display: flex;
+    justify-content: center; /* This centers the tabs */
+    flex-wrap: wrap;         /* This allows them to wrap */
+    width: 100%;             /* <-- THIS IS THE FIX */
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;  /* Good practice for layout */
+}
+
+.zone-tab { 
+	padding: 10px 10px; 
+	cursor: pointer; 
+	border-bottom: 3px solid transparent; 
+	background-color: transparent; 
+	font-weight: bold; 
+	color: #666; 
+	transition: all 0.3s; 
+}
+
+.zone-tab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+
+/* NEW: Zone Reference Image */
+.zone-image-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.zone-image-container img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+/* NEW: Spot Buttons Container */
+.spot-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+.spot-button {
+    padding: 12px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+}
+.spot-button.available {
+    background-color: #fff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.spot-button.available:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+	transform: scale(110%);
+	transition: ease-in-out 0.3s;
+}
+.spot-button.selected {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+.spot-button.booked {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Summary Panel Content (unchanged) */
+#summary-content ul { list-style: none; padding: 0; margin: 0; }
+#summary-content li { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+#summary-total { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; padding: 15px 10px; margin-top: 10px; border-top: 2px solid #333; }
+.booking-form { margin-top: 1rem; }
+.booking-form label, .booking-form input { width: 100%; box-sizing: border-box; border-radius: 4px; }
+.booking-form button {
+	font-size: 1rem;
+	font-weight: bold;
+	width: 100%; 
+	margin:1rem auto; 
+	padding: 1rem;
+	background-color: var(--primary-color); 
+	border: none; 
+	color: var(--light-color); 
+	cursor: pointer;
+}
+
+.booking-form button:hover {
+	transition: ease-in-out 0.5s;
+}
+
+/* NEW: Style for the single image container */
+.single-image-container {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.single-image-container img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+/* --- Image Slider Styles --- */
+.slider-container {
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.slider-slide {
+    display: none; /* Hide all slides by default */
+}
+
+.slider-slide img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+/* Fade animation */
+.fade {
+    animation-name: fade;
+    animation-duration: 0.8s;
+}
+@keyframes fade {
+    from { opacity: .4 } 
+    to { opacity: 1 }
+}
+
+/* Next & previous buttons */
+.slider-prev, .slider-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: transparent;
+}
+.slider-next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+.slider-prev:hover, .slider-next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Dots navigation */
+.slider-dots {
+    text-align: center;
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+}
+.slider-dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+.slider-dot.active, .slider-dot:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.summary-details h4 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.summary-calculation {
+    margin-top: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    font-size: 0.9em;
+}
+
+.summary-row.discount {
+    color: #28a745; /* Green color for the discount */
+    font-weight: bold;
+}
+
+.status-message {
+	padding: 10px;
+	margin-top: 15px;
+	border-radius: 4px;
+	text-align: center;
+	font-size: 0.9em;
+}
+
+.success {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.error {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+footer {
+	background-color: var(--dark-color);
+	color: var(--light-color);
+	text-align: center;
+	padding: 1.5rem;
+}
+
+/* --- Tablet Breakpoint (for larger layout changes) --- */
+@media (max-width: 992px) {
+    /* Stack the booking system vertically */
+    .booking-app-container {
+        flex-direction: column;
+    }
+
+    /* Allow map and summary panel to take full width */
+    .spot-selection-area {
+        min-width: 100%;
+    }
+    
+    .summary-panel {
+		min-width: 100%;
+        position: static; /* Unstick the summary panel on smaller screens */
+    }
+
+    /* Stack location map and address info */
+    .location-container {
+        flex-direction: column;
+    }
+}
+
+/* --- Mobile Breakpoint (for navigation and smaller tweaks) --- */
+@media (max-width: 768px) {
+    .content-section {
+        padding: 2rem 1rem;
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+    .content-section h2 {
+        font-size: 2rem;
+    }
+
+    /* --- Hamburger Menu Logic --- */
+    .menu-toggle {
+        display: flex; /* Show the hamburger button */
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1001; /* Ensure it's on top of other content */
+    }
+    .menu-toggle .bar {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: var(--light-color);
+        border-radius: 2px;
+        transition: all 0.3s ease-in-out;
+    }
+    /* Animate hamburger to an 'X' */
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+    }
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* --- Navigation Menu Styling for Mobile --- */
+    header nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        position: fixed;
+        top: 0;
+        right: -100%; /* Start off-screen */
+        width: 80%;
+        height: 100vh;
+        background-color: var(--dark-color);
+        transition: right 0.4s ease-in-out;
+        z-index: 1000;
+    }
+    header nav.active {
+        right: 0; /* Slide in when active */
+    }
+    header nav a {
+        font-size: 1.5rem;
+        margin-left: 0;
+    }
+    
+    /* Stack other content sections */
+    .potential-container {
+        flex-direction: column;
+    }
+    
+}
+
+/* Hide hamburger button on desktop by default */
+.menu-toggle {
+    display: none;
+}

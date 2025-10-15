@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iHAVECPU Pattaya - Branch Showcase & Booking</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section id="hero">
+            <header>
+                <div class="logo">
+                    <img src="images/logo.png" alt="iHAVECPU Logo">
+                </div>
+                <nav id="nav-menu">
+                    <a href="#gallery">Gallery</a>
+                    <a href="#potential">Our Location</a>
+                    <a href="#booking">Ad Booking</a>
+                </nav>
+                <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </header>
+            <div class="hero-content">
+                <h1>iHAVECPU PATTAYA</h1>
+                <p>Your Ultimate PC Building Destination on the Eastern Seaboard.</p>
+                <a href="#booking" class="cta-button">Book Ad Space Now</a>
+            </div>
+        </section>
+
+        <section id="gallery" class="content-section">
+            <h2>SHOP PERSPECTIVES</h2>
+            <div class="gallery-main-image">
+                <img src="images/gallery1.jpg" alt="Main gallery view of the store interior" id="main-gallery-image">
+            </div>
+            <div class="gallery-grid">
+                <img src="images/gallery1.jpg" alt="Store Exterior" class="gallery-thumb active-thumb">
+                <img src="images/gallery2.jpg" alt="Front Store Branding Sticker" class="gallery-thumb">
+                <img src="images/gallery3.jpg" alt="Monitor Display" class="gallery-thumb">
+                <img src="images/gallery4.jpg" alt="Cashier" class="gallery-thumb">
+                <img src="images/gallery5.jpg" alt="Store interior" class="gallery-thumb">
+                <img src="images/gallery6.jpg" alt="Experience Zone" class="gallery-thumb">
+                <img src="images/gallery7.jpg" alt="Store interior" class="gallery-thumb">
+                <img src="images/gallery8.jpg" alt="Store interior" class="gallery-thumb">
+                <img src="images/gallery9.jpg" alt="Store interior" class="gallery-thumb">
+                <img src="images/gallery10.jpg" alt="Case" class="gallery-thumb">
+                <img src="images/gallery11.jpg" alt="DIY display" class="gallery-thumb">
+                <img src="images/gallery13.jpg" alt="Cashier" class="gallery-thumb">
+            </div>
+        </section>
+
+        <section id="layout" class="content-section">
+            <h2>SHOP LAYOUT</h2>
+            <div class="layout-main-image">
+                <img src="images/layout.jpg" alt="Shop Layout" id="layout-image">
+            </div>
+        </section>
+
+        <section id="potential" class="content-section">
+            <h2>Location Potential & Strong Points</h2>
+            <div class="potential-container">
+                <div class="potential-item">
+                    <h3>📍 Prime Location</h3>
+                    <p>Situated on Pattaya 3rd Road, a major thoroughfare with high traffic and visibility, ensuring constant exposure to both residents and tourists.</p>
+                </div>
+                <div class="potential-item">
+                    <h3>🤝 Community Hub</h3>
+                    <p>Positioned as the go-to destination for the large and growing community of tech enthusiasts, gamers, and expats in the Eastern Seaboard region.</p>
+                </div>
+                <div class="potential-item">
+                    <h3>🛍️ High Foot Traffic</h3>
+                    <p>Located near popular shopping centers, hotels, and residential areas, guaranteeing a steady stream of walk-in customers and potential clients.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="location" class="content-section">
+            <h2>Find Us</h2>
+            <div class="location-container">
+                <div class="map-embed">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.6504377731785!2d100.90053019999999!3d12.9301743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310295007cbcdacf%3A0xb5707ba1688f0f93!2z4LiB4Liy4LmB4LifLi7guJfguKfguLXguJzguKU!5e0!3m2!1sen!2sth!4v1760421582349!5m2!1sen!2sth"   
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                </div>
+                <div class="address-info">
+                    <h3>iHAVECPU Pattaya Branch</h3>
+                    <p><strong>Address:</strong> 365, Pattaya City, Bang Lamung District, Chon Buri 20150</p>
+                    <p><strong>Phone:</strong> 09x-xxx-xxxx</p>
+                    <p><strong>Hours:</strong> Open Daily, 10:00 AM - 7:00 PM</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="booking" class="content-section">
+            <h2>Interactive Ad-Space Booking System</h2>
+            <p class="subtitle">Select a zone, then click on available positions to add them to your booking summary.</p>
+            <div class="booking-app-container">
+                <div class="spot-selection-area">
+                    <div class="zone-tabs" id="zone-tabs"></div>
+                    <div class="zone-image-container" id="zone-image-container"></div>
+                    <div class="spot-buttons-container" id="spot-buttons-container"></div>
+                </div>
+                <div class="summary-panel" id="summary-panel">
+                    <h3>Booking Summary</h3>
+                    <div id="summary-content"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Contact: mkt@ihavecpu.com</p>
+        <p>© 2025 iHAVECPU Pattaya. All Rights Reserved.</p>
+    </footer>
+
+    <div id="image-modal" class="modal">
+        <span class="close-modal">×</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
