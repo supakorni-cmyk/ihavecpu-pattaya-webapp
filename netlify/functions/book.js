@@ -9,7 +9,7 @@ export default async (req) => {
     try {
         const { spotIds, email, brand } = await req.json();
         
-        if (!spotIds || spotIds.length === 0 || !email || !brand) {
+        if (!spotIds || spotIds.length === 0 || !email || !brand ) {
             return new Response(JSON.stringify({ message: "Spot selections, email, and brand name are required." }), { status: 400 });
         }
 
@@ -53,7 +53,7 @@ export default async (req) => {
             from: `"iHAVECPU Marketing" <${process.env.GMAIL_USER}>`,
             to: email, 
             cc: 'panarin.b@ihavecpu.com, sompong@ihavecpu.com, jittikorn.m@ihavecpu.com, kittichai.r@ihavecpu.com, setthinat.s@ihavecpu.com, attapon.p@ihavecpu.com, sutharat@ihavecpu.com, mkt@ihavecpu.com',
-            subject: `Booking Confirmation for ${brand} at iHAVECPU Pattaya`,
+            subject: `[ iHAVECPU x ${brand} ] Booking Confirmation at iHAVECPU Pattaya`,
             html: `<h1>Thank you!</h1><p>Booking for brand "<strong>${brand}</strong>" confirmed.</p><h3>Positions:</h3><ul>${spotsListHtml}</ul><hr><p>Subtotal: ${subtotal.toLocaleString()} THB</p>${discountHtml}<h3>Total: ${finalTotal.toLocaleString()} THB</h3><br><p>Sincerely,<br>iHAVECPU Marketing</p>`
         };
         await transporter.sendMail(mailOptions);
