@@ -7,17 +7,10 @@ export default async (req) => {
         const dataPath = path.resolve(process.cwd(), 'data/spots.json');
         const localData = await fs.readFile(dataPath, 'utf-8');
         const spotsObject = JSON.parse(localData);
-
         const spotsStore = getStore("spots");
         await spotsStore.setJSON("spots-data", spotsObject);
-
-        return new Response("✅ Data has been successfully seeded into the Blob store.", {
-            headers: { "Content-Type": "text/plain" },
-        });
+        return new Response("✅ Data seeded successfully.", { headers: { "Content-Type": "text/plain" } });
     } catch (error) {
-        return new Response(`Error seeding data: ${error.message}`, {
-            headers: { "Content-Type": "text/plain" },
-            status: 500
-        });
+        return new Response(`Error seeding data: ${error.message}`, { status: 500 });
     }
 };
