@@ -88,7 +88,7 @@
 
         async function fetchBookings() {
             try {
-                const response = await fetch('/admin-data');
+                const response = await fetch('/api/admin-data');
                 const data = await response.json();
                 
                 const brandsContainer = document.getElementById('brands-container');
