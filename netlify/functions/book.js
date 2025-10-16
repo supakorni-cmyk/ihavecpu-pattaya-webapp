@@ -52,7 +52,7 @@ export default async (req) => {
         const mailOptions = {
             from: `"iHAVECPU Pattaya" <${process.env.GMAIL_USER}>`,
             to: email, 
-            cc: 'manager@example.com',
+            cc: 'panarin.b@ihavecpu.com, sompong@ihavecpu.com, jittikorn.m@ihavecpu.com, kittichai.r@ihavecpu.com, setthinat.s@ihavecpu.com, attapon.p@ihavecpu.com, sutharat@ihavecpu.com, mkt@ihavecpu.com',
             subject: `Booking Confirmation for ${brand} at iHAVECPU Pattaya`,
             html: `<h1>Thank you!</h1><p>Booking for brand "<strong>${brand}</strong>" confirmed.</p><h3>Positions:</h3><ul>${spotsListHtml}</ul><hr><p>Subtotal: ${subtotal.toLocaleString()} THB</p>${discountHtml}<h3>Total: ${finalTotal.toLocaleString()} THB</h3><br><p>Sincerely,<br>The iHAVECPU Pattaya Team</p>`
         };
