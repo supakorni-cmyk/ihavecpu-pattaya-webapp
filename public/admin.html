@@ -48,6 +48,8 @@
             text-align: center;
         }
         .export-btn:hover { background-color: #144D2D; }
+        .summary-row { display: flex; justify-content: space-between; }
+        .discount-row { color: #28a745; } /* Green for discount */
     </style>
 </head>
 <body>
@@ -57,7 +59,7 @@
     
     <div id="brands-container"></div>
 
-    <h2 id="total-revenue">Total Booked Revenue: Calculating...</h2>
+    <h2 id="total-revenue">Total Revenue After Discount: Calculating...</h2>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -114,7 +116,7 @@
 
                 for (const brandName in bookingsByBrand) {
                     const brandSpots = bookingsByBrand[brandName];
-                    let brandTotal = 0;
+                    let brandSubtotal = 0;
                     let tableRowsHTML = '';
 
                     brandSpots.forEach(spot => {
@@ -131,10 +133,43 @@
                                 </td>
                             </tr>
                         `;
-                        brandTotal += spot.price;
+                        brandSubtotal += spot.price;
                     });
+                    
+                    // --- NEW: Calculate discount for this brand ---
+                    let discountAmount = 0;
+                    if (brandSpots.length === 2) {
+                        discountAmount = 5000;
+                    } else if (brandSpots.length >= 3) {
+                        discountAmount = 10000;
+                    }
+                    const brandTotal = brandSubtotal - discountAmount;
+                    // --- END NEW ---
 
                     overallTotalRevenue += brandTotal;
+
+                    // --- NEW: Build the footer with discount details ---
+                    let tfootHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align: right;">Subtotal:</td>
+                            <td>${brandSubtotal.toLocaleString()} THB</td>
+                        </tr>
+                    `;
+                    if (discountAmount > 0) {
+                        tfootHTML += `
+                            <tr class="discount-row">
+                                <td colspan="4" style="text-align: right;">Discount:</td>
+                                <td>-${discountAmount.toLocaleString()} THB</td>
+                            </tr>
+                        `;
+                    }
+                    tfootHTML += `
+                        <tr>
+                            <td colspan="4" style="text-align: right;"><strong>Brand Total:</strong></td>
+                            <td><strong>${brandTotal.toLocaleString()} THB</strong></td>
+                        </tr>
+                    `;
+                    // --- END NEW ---
 
                     const brandSectionHTML = `
                         <h3>Brand: ${brandName}</h3>
@@ -152,23 +187,22 @@
                                 ${tableRowsHTML}
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <td colspan="4" style="text-align: right;"><strong>Brand Total:</strong></td>
-                                    <td><strong>${brandTotal.toLocaleString()} THB</strong></td>
-                                </tr>
+                                ${tfootHTML}
                             </tfoot>
                         </table>
                     `;
                     brandsContainer.innerHTML += brandSectionHTML;
                 }
 
-                totalRevenueEl.textContent = `Total Booked Revenue: ${overallTotalRevenue.toLocaleString()} THB`;
+                totalRevenueEl.textContent = `Total Revenue After Discount: ${overallTotalRevenue.toLocaleString()} THB`;
 
             } catch (error) {
                 console.error("Failed to fetch booking data:", error);
                 document.getElementById('brands-container').innerHTML = "<p>Error loading data.</p>";
             }
         }
+        
+        fetchBookings();
     </script>
 </body>
 </html>
