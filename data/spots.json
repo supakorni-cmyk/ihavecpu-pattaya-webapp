@@ -33,12 +33,7 @@
   },
   "interiorSticker": {
     "name": "Interior Sticker",
-    "layoutImages": [
-      "images/ist1-2.jpg",
-      "images/ist3-4.jpg",
-      "images/ist5-6.jpg",
-      "images/ist7-8.jpg"
-    ],
+    "layoutImages": ["images/ist1-2.jpg", "images/ist3-4.jpg", "images/ist5-6.jpg", "images/ist7-8.jpg"],
     "spots": {
       "IST-1": { "name": "IST-1", "size": "3m x 1.5m", "price": 35000, "status": "Available", "bookedBy": "" },
       "IST-2": { "name": "IST-2", "size": "3m x 1.5m", "price": 35000, "status": "Available", "bookedBy": "" },
@@ -52,11 +47,7 @@
   },
   "interiorLogo": {
     "name": "Interior Logo",
-    "layoutImages": [
-      "images/1.jpg",
-      "images/2.jpg",
-      "images/3.jpg"
-    ],
+    "layoutImages": ["images/1.jpg", "images/2.jpg", "images/3.jpg"],
     "spots": {
       "A1": { "name": "A1 - CPU", "size": "3m x 1.5m", "price": 20000, "status": "Available", "bookedBy": "" },
       "A2": { "name": "A2 - CPU", "size": "3m x 1.5m", "price": 20000, "status": "Available", "bookedBy": "" },
