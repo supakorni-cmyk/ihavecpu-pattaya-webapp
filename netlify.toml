@@ -1,5 +1,6 @@
 [build]
   publish = "public"
+  # This line MUST correctly point to your functions folder.
   functions = "netlify/functions"
 
 [functions]
