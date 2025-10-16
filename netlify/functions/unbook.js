@@ -1,37 +1,29 @@
-import { getStore } from "@netlify/blobs";
+const { getStore } = require("@netlify/blobs");
 
-// Helper function for Basic Authentication
-const checkAuth = (req) => {
-    const authHeader = req.headers.get("authorization");
+// (You'll need a basic auth helper for CJS)
+const checkAuth = (event) => {
+    const authHeader = event.headers.authorization;
     if (!authHeader) return false;
-
     const [scheme, encoded] = authHeader.split(" ");
     if (scheme !== "Basic" || !encoded) return false;
-
     const decoded = Buffer.from(encoded, "base64").toString();
     const [user, pass] = decoded.split(":");
-
     return user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS;
 };
 
-export default async (req, context) => {
-    // 1. Check for password
-    if (!checkAuth(req)) {
-        return new Response("Unauthorized", {
-            status: 401,
-            headers: { "WWW-Authenticate": 'Basic realm="Admin Area"' },
-        });
+exports.handler = async (event, context) => {
+    if (!checkAuth(event)) {
+        return { statusCode: 401, headers: { "WWW-Authenticate": 'Basic realm="Admin Area"' }, body: "Unauthorized" };
     }
 
-    // 2. Handle the un-book logic
-    if (req.method !== "POST") {
-        return new Response("Method Not Allowed", { status: 405 });
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
     }
 
     try {
-        const { zoneId, spotId } = await req.json();
+        const { zoneId, spotId } = JSON.parse(event.body);
         if (!zoneId || !spotId) {
-            return new Response(JSON.stringify({ message: "Zone ID and Spot ID are required." }), { status: 400 });
+            return { statusCode: 400, body: JSON.stringify({ message: "Zone ID and Spot ID are required." }) };
         }
 
         const spotsStore = getStore("spots");
@@ -39,21 +31,17 @@ export default async (req, context) => {
 
         const spot = adSpots[zoneId]?.spots[spotId];
         if (!spot) {
-            return new Response(JSON.stringify({ message: "Spot not found." }), { status: 404 });
+            return { statusCode: 404, body: JSON.stringify({ message: "Spot not found." }) };
         }
 
         spot.status = "Available";
         spot.bookedBy = "";
         spot.brand = "";
 
-        // Write the updated data back to the Blob store
         await spotsStore.setJSON("spots-data", adSpots);
 
-        return new Response(JSON.stringify({ success: true, message: "Position has been made available." }), {
-            headers: { "Content-Type": "application/json" },
-        });
-
+        return { statusCode: 200, body: JSON.stringify({ success: true, message: "Position has been made available." }) };
     } catch (error) {
-        return new Response(JSON.stringify({ message: error.message }), { status: 500 });
+        return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
     }
 };

@@ -1,4 +1,5 @@
-import { getStore } from "@netlify/blobs";
+const { getStore } = require("@netlify/blobs");
+
 
 // Helper function for Basic Authentication
 const checkAuth = (req) => {
@@ -11,7 +12,7 @@ const checkAuth = (req) => {
     return user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS;
 };
 
-export default async (req, context) => {
+exports.handler = async (req, context) => {
     // 1. Check for password
     if (!checkAuth(req)) {
         return new Response("Unauthorized", {
