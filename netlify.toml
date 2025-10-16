@@ -2,6 +2,10 @@
   publish = "public"
   functions = "netlify/functions"
 
+# ADD THIS NEW SECTION
+[functions]
+  included_files = ["data/**"]
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
