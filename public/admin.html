@@ -48,8 +48,23 @@
             text-align: center;
         }
         .export-btn:hover { background-color: #144D2D; }
-        .summary-row { display: flex; justify-content: space-between; }
-        .discount-row { color: #28a745; } /* Green for discount */
+        .discount-row { color: #28a745; }
+        /* NEW STYLES */
+        .recalculate-input {
+            width: 100px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .recalculate-btn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .recalculate-btn:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
@@ -88,16 +103,33 @@
             }
         }
 
+        function recalculateTotals() {
+            let overallTotalRevenue = 0;
+            const brandTables = document.querySelectorAll('.brand-table');
+            
+            brandTables.forEach(table => {
+                const brandSubtotal = parseFloat(table.dataset.subtotal);
+                const autoDiscount = parseFloat(table.dataset.autodiscount);
+                
+                const moreDiscountInput = table.querySelector('.recalculate-input');
+                const moreDiscount = parseFloat(moreDiscountInput.value) || 0;
+                
+                const brandTotal = brandSubtotal - autoDiscount - moreDiscount;
+                
+                table.querySelector('.brand-total-display').textContent = `${brandTotal.toLocaleString()} THB`;
+                overallTotalRevenue += brandTotal;
+            });
+            
+            document.getElementById('total-revenue').textContent = `Total Revenue After Discount: ${overallTotalRevenue.toLocaleString()} THB`;
+        }
+
         async function fetchBookings() {
             try {
                 const response = await fetch('/api/admin-data');
                 const data = await response.json();
                 
                 const brandsContainer = document.getElementById('brands-container');
-                const totalRevenueEl = document.getElementById('total-revenue');
-                
                 brandsContainer.innerHTML = '';
-                let overallTotalRevenue = 0;
                 
                 const bookingsByBrand = {};
                 for (const zoneId in data) {
@@ -127,53 +159,44 @@
                                 <td>${spot.price.toLocaleString()} THB</td>
                                 <td>${spot.bookedBy}</td>
                                 <td>
-                                    <button class="unbook-btn" onclick="unbookSpot('${spot.zoneId}', '${spot.spotId}')">
-                                        Un-book
-                                    </button>
+                                    <button class="unbook-btn" onclick="unbookSpot('${spot.zoneId}', '${spot.spotId}')">Un-book</button>
                                 </td>
                             </tr>
                         `;
                         brandSubtotal += spot.price;
                     });
                     
-                    // --- NEW: Calculate discount for this brand ---
-                    let discountAmount = 0;
+                    let autoDiscount = 0;
                     if (brandSpots.length === 2) {
-                        discountAmount = 5000;
+                        autoDiscount = 5000;
                     } else if (brandSpots.length >= 3) {
-                        discountAmount = 10000;
+                        autoDiscount = 10000;
                     }
-                    const brandTotal = brandSubtotal - discountAmount;
-                    // --- END NEW ---
 
-                    overallTotalRevenue += brandTotal;
-
-                    // --- NEW: Build the footer with discount details ---
-                    let tfootHTML = `
+                    const tfootHTML = `
                         <tr>
                             <td colspan="4" style="text-align: right;">Subtotal:</td>
                             <td>${brandSubtotal.toLocaleString()} THB</td>
                         </tr>
-                    `;
-                    if (discountAmount > 0) {
-                        tfootHTML += `
-                            <tr class="discount-row">
-                                <td colspan="4" style="text-align: right;">Discount:</td>
-                                <td>-${discountAmount.toLocaleString()} THB</td>
-                            </tr>
-                        `;
-                    }
-                    tfootHTML += `
+                        ${autoDiscount > 0 ? `
+                        <tr class="discount-row">
+                            <td colspan="4" style="text-align: right;">Auto Discount:</td>
+                            <td>-${autoDiscount.toLocaleString()} THB</td>
+                        </tr>` : ''}
+                        <tr>
+                            <td colspan="3" style="text-align: right;">More Discount:</td>
+                            <td><input type="number" class="recalculate-input" placeholder="0"></td>
+                            <td><button class="recalculate-btn">Recalculate</button></td>
+                        </tr>
                         <tr>
                             <td colspan="4" style="text-align: right;"><strong>Brand Total:</strong></td>
-                            <td><strong>${brandTotal.toLocaleString()} THB</strong></td>
+                            <td><strong class="brand-total-display">${(brandSubtotal - autoDiscount).toLocaleString()} THB</strong></td>
                         </tr>
                     `;
-                    // --- END NEW ---
 
                     const brandSectionHTML = `
                         <h3>Brand: ${brandName}</h3>
-                        <table>
+                        <table class="brand-table" data-subtotal="${brandSubtotal}" data-autodiscount="${autoDiscount}">
                             <thead>
                                 <tr>
                                     <th>Zone</th>
@@ -183,26 +206,26 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                ${tableRowsHTML}
-                            </tbody>
-                            <tfoot>
-                                ${tfootHTML}
-                            </tfoot>
+                            <tbody>${tableRowsHTML}</tbody>
+                            <tfoot>${tfootHTML}</tfoot>
                         </table>
                     `;
                     brandsContainer.innerHTML += brandSectionHTML;
                 }
 
-                totalRevenueEl.textContent = `Total Revenue After Discount: ${overallTotalRevenue.toLocaleString()} THB`;
+                // Attach event listeners to all recalculate buttons
+                document.querySelectorAll('.recalculate-btn').forEach(button => {
+                    button.addEventListener('click', recalculateTotals);
+                });
+
+                // Calculate initial total
+                recalculateTotals();
 
             } catch (error) {
                 console.error("Failed to fetch booking data:", error);
                 document.getElementById('brands-container').innerHTML = "<p>Error loading data.</p>";
             }
         }
-        
-        fetchBookings();
     </script>
 </body>
 </html>
