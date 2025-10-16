@@ -1,3 +1,5 @@
+// File: netlify/functions/seed-data.js
+
 const { getStore } = require("@netlify/blobs");
 const fs = require("fs").promises;
 const path = require("path");
@@ -23,6 +25,7 @@ exports.handler = async (event, context) => {
             body: "✅ Data has been successfully seeded into the Blob store.",
         };
     } catch (error) {
+        console.error("Seeder Error:", error);
         return {
             statusCode: 500,
             headers: { "Content-Type": "text/plain" },
