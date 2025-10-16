@@ -1,20 +1,23 @@
-const { getStore } = require("@netlify/blobs");
-const ExcelJS = require("exceljs");
+import { getStore } from "@netlify/blobs";
+import ExcelJS from "exceljs";
 
 // Helper function for Basic Authentication
 const checkAuth = (req) => {
     const authHeader = req.headers.get("authorization");
-    // ... (same checkAuth function as above) ...
     if (!authHeader) return false;
+
     const [scheme, encoded] = authHeader.split(" ");
     if (scheme !== "Basic" || !encoded) return false;
+
     const decoded = Buffer.from(encoded, "base64").toString();
     const [user, pass] = decoded.split(":");
+    
+    // Uses environment variables set in your Netlify dashboard
     return user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS;
 };
 
-exports.handler = async (req, context) => {
-    // 1. Check for password
+export default async (req) => {
+    // 1. Check if the user is authorized
     if (!checkAuth(req)) {
         return new Response("Unauthorized", {
             status: 401,
@@ -30,6 +33,7 @@ exports.handler = async (req, context) => {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Bookings");
 
+        // Define the columns for the Excel sheet
         worksheet.columns = [
             { header: "Brand", key: "brand", width: 30 },
             { header: "Position Name", key: "name", width: 30 },
@@ -37,26 +41,38 @@ exports.handler = async (req, context) => {
             { header: "Price", key: "price", width: 15, style: { numFmt: "#,##0 THB" } },
             { header: "Booked By (Email)", key: "bookedBy", width: 30 },
         ];
-        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).font = { bold: true }; // Style the header
+        
         let totalRevenue = 0;
 
+        // Loop through the data and add rows for booked spots
         for (const zoneId in adSpots) {
             const zone = adSpots[zoneId];
             for (const spotId in zone.spots) {
                 const spot = zone.spots[spotId];
                 if (spot.status === "Booked") {
-                    worksheet.addRow({ brand: spot.brand, name: spot.name, zoneName: zone.name, price: spot.price, bookedBy: spot.bookedBy });
+                    worksheet.addRow({ 
+                        brand: spot.brand, 
+                        name: spot.name, 
+                        zoneName: zone.name, 
+                        price: spot.price, 
+                        bookedBy: spot.bookedBy 
+                    });
                     totalRevenue += spot.price;
                 }
             }
         }
-        worksheet.addRow([]);
+        
+        // Add a total row at the bottom
+        worksheet.addRow([]); // Blank row for spacing
         const totalRow = worksheet.addRow({ brand: "Total Revenue", price: totalRevenue });
         totalRow.font = { bold: true };
 
+        // Write the Excel file to a buffer in memory
         const buffer = await workbook.xlsx.writeBuffer();
         const date = new Date().toISOString().slice(0, 10);
 
+        // Return the buffer as a downloadable file
         return new Response(buffer, {
             status: 200,
             headers: {
@@ -65,6 +81,7 @@ exports.handler = async (req, context) => {
             },
         });
     } catch (error) {
+        console.error("Excel Export Error:", error);
         return new Response(JSON.stringify({ message: "Error creating Excel file." }), { status: 500 });
     }
 };

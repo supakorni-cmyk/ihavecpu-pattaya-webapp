@@ -1,19 +1,16 @@
-const { getStore } = require("@netlify/blobs");
+import { getStore } from "@netlify/blobs";
 
-exports.handler = async (event, context) => {
+export default async (req) => {
     try {
         const spotsStore = getStore("spots");
         const adSpots = await spotsStore.get("spots-data", { type: "json" });
-
-        return {
-            statusCode: 200,
+        
+        return new Response(JSON.stringify(adSpots), {
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(adSpots),
-        };
+        });
     } catch (error) {
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: "Error reading data from Blob store" }),
-        };
+        return new Response(JSON.stringify({ message: "Error reading data from Blob store" }), {
+            status: 500,
+        });
     }
 };

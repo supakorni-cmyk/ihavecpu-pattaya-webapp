@@ -1,7 +1,5 @@
-const { getStore } = require("@netlify/blobs");
+import { getStore } from "@netlify/blobs";
 
-
-// Helper function for Basic Authentication
 const checkAuth = (req) => {
     const authHeader = req.headers.get("authorization");
     if (!authHeader) return false;
@@ -12,8 +10,7 @@ const checkAuth = (req) => {
     return user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS;
 };
 
-exports.handler = async (req, context) => {
-    // 1. Check for password
+export default async (req) => {
     if (!checkAuth(req)) {
         return new Response("Unauthorized", {
             status: 401,
@@ -21,7 +18,6 @@ exports.handler = async (req, context) => {
         });
     }
 
-    // 2. Return the data from the Blob store
     try {
         const spotsStore = getStore("spots");
         const adSpots = await spotsStore.get("spots-data", { type: "json" });
@@ -34,4 +30,4 @@ exports.handler = async (req, context) => {
             status: 500,
         });
     }
-};
+};  
