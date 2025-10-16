@@ -1,31 +1,33 @@
+// File: netlify/functions/spots.js
+
 const fs = require('fs-extra');
 const path = require('path');
 
 exports.handler = async (event, context) => {
     try {
-        // Construct the full path to the data file.
-        // process.cwd() refers to the root directory during Netlify's build process.
-        const dataPath = path.join(process.cwd(), 'data', 'spots.json');
+        // This builds the path from the function's location up to the root, then down to data/spots.json
+        // It's more reliable than process.cwd() in some cases.
+        const dataPath = path.resolve(process.cwd(), 'data/spots.json');
         
-        // Read the JSON file from the data directory.
+        console.log("Attempting to read data from:", dataPath); // Adds a debug log
+
         const adSpots = await fs.readJson(dataPath);
         
-        // Return a successful response with the data.
         return {
             statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(adSpots),
         };
     } catch (error) {
-        // Log the error for debugging purposes in Netlify.
-        console.error("Error reading spots data:", error);
+        console.error("Function Error:", error);
         
-        // Return an error response if something goes wrong.
         return { 
             statusCode: 500, 
-            body: JSON.stringify({ message: 'Error: Could not read booking data.' }) 
+            body: JSON.stringify({ 
+                message: 'Error reading booking data file.',
+                error: error.message,
+                path_tried: path.resolve(process.cwd(), 'data/spots.json') // Shows the exact path it failed on
+            }) 
         };
     }
 };
