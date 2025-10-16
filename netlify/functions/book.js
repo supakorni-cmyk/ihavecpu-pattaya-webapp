@@ -16,7 +16,6 @@ export default async (req) => {
         const spotsStore = getStore("spots");
         let adSpots = await spotsStore.get("spots-data", { type: "json" });
 
-        // Validation & Booking Logic
         for (const item of spotIds) {
             const spot = adSpots[item.zoneId]?.spots[item.spotId];
             if (!spot || spot.status === 'Booked') {
@@ -37,7 +36,6 @@ export default async (req) => {
 
         await spotsStore.setJSON("spots-data", adSpots);
 
-        // Email logic
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS }
