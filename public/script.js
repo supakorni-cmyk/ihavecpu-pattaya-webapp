@@ -205,7 +205,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         summaryHTML += `</div><div id="summary-total"><span>Total</span><span>${finalTotal.toLocaleString()} THB</span></div></div>`;
         
-        const formHTML = `<form class="booking-form" id="summary-form"><label for="email">Your Email:</label><input type="email" id="email" required placeholder="name@example.com"><label for="brand">Your Brand:</label><input type="text" id="brand" required placeholder="Your Brand"><button type="submit">Book Selected Positions</button><div id="status-message"></div></form>`;
+        const formHTML = `
+            <form class="booking-form" id="summary-form">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" required placeholder="name@example.com">
+
+                <label for="cc">CC Emails (optional):</label>
+                <input type="text" id="cc" placeholder="email1@example.com, email2@example.com">
+                
+                <label for="brand">Your Brand:</label>
+                <input type="text" id="brand" required placeholder="Your Brand">
+                
+                <button type="submit">Book Selected Positions</button>
+                <div id="status-message"></div>
+            </form>`;
 
         summaryContent.innerHTML = summaryHTML + formHTML;
         document.getElementById('summary-form').addEventListener('submit', handleBookingSubmit);
@@ -214,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleBookingSubmit = async (event) => {
         event.preventDefault();
         const emailInput = document.getElementById('email');
+        const ccInput = document.getElementById('cc');
         const brandInput = document.getElementById('brand');
         const statusMessage = document.getElementById('status-message');
 
@@ -233,7 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const bookingData = { spotIds: selection, email: emailInput.value, brand: brandInput.value };
+        const bookingData = { 
+                spotIds: selection, 
+                email: emailInput.value, 
+                ccEmails: ccInput.value,
+                brand: brandInput.value 
+            };
         
         try {
             const response = await fetch('/api/book', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(bookingData) });
