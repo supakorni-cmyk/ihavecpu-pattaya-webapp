@@ -67,10 +67,12 @@
             fetchBookings();
         });
 
+       // Inside public/admin.html script tag
+
         async function unbookSpot(zoneId, spotId) {
+            console.log(`[Admin] Attempting to unbook: ${zoneId}/${spotId}`); // Log click
             if (!confirm("Are you sure you want to make this position available again?")) return;
             try {
-                // Fetch using API path for Netlify
                 const response = await fetch('/api/unbook', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -78,7 +80,14 @@
                 });
                 const result = await response.json();
                 alert(result.message);
-                if (response.ok) fetchBookings(); // Refresh data on success
+
+                if (response.ok) {
+                    console.log("[Admin] Unbook successful, attempting to refresh data..."); // Log success
+                    fetchBookings(); // Refresh data on success
+                    console.log("[Admin] fetchBookings() called."); // Confirm refresh called
+                } else {
+                    console.error("[Admin] Unbook API call failed:", result.message); // Log failure
+                }
             } catch (error) {
                 console.error("Unbook Error:", error);
                 alert('A network error occurred while trying to un-book.');
